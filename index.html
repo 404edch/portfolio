@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduardo H. Chechin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0px;
+            background-color: #000000;
+            --saber-color: #ffffff; /* default lightsaber color */
+            font-family: 'Montserrat', Arial, sans-serif;
+            position: relative;
+        }
+
+        .principal {
+            display: flex;
+            align-items: center;
+            max-width: 800px;
+            width: min(1200px, 100%);
+            margin: 0 auto; /* center the card and prevent huge right space */
+            background-color: #000000; /* opaque off-white so grid stays behind */
+            border-radius: 20px;
+            padding: 2rem; /* slightly smaller padding to reduce inner white space */
+            /* Lightsaber-style glow on the container */
+            border: 3px solid var(--saber-color);
+            box-shadow:
+                0 0 12px var(--saber-color),
+                0 0 28px rgba(0,0,0,0.6),
+                0 0 40px rgba(0,0,0,0.4),
+                inset 0 0 10px rgb(255, 255, 255);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .conteudo {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            /* prevent this wrapper from growing to fill the container
+            so the content and logo stay centered as a group */
+            flex-grow: 0;
+            justify-content: flex-start;
+        }
+
+        #profile-image {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border-radius: 50%;
+        }
+
+        header {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .texto {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 500px;  /* Limita a largura do texto para melhor leitura */
+            }
+
+            header {
+                color: #ffffff;
+            }
+
+            p {
+                color: #ffffff;
+                line-height: 1.6;
+                font-size: small;
+        }
+
+        .completion-date {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .highlight-period {
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* Logo styles */
+        #logo {
+            width: 120px;
+            height: auto;
+            flex-shrink: 0;
+            display: block;
+            margin-left: 1rem; /* small gap between text and logo */
+            
+        }
+
+
+        .certificados {
+            margin-top: 2rem;
+            text-align: center;
+            background-color: #F5F5F5;
+            border-radius: 20px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
+            max-width: 800px;
+            width: min(1200px, 100%);
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2rem;
+        }
+
+        .projetos,
+        .contato {
+            margin-top: 2rem;
+            text-align: center;
+            background-color: #F5F5F5;
+            border-radius: 20px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
+            max-width: 800px;
+            width: min(1200px, 100%);
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2rem;
+        }
+
+        /* Pulse glow used by #profile-image */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 12px var(--saber-color), 0 0 28px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.06); }
+            50% { box-shadow: 0 0 20px var(--saber-color), 0 0 36px rgba(0,0,0,0.6), 0 0 50px rgba(0,0,0,0.4), inset 0 0 12px rgba(255,255,255,0.08); }
+            100% { box-shadow: 0 0 12px var(--saber-color), 0 0 28px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.06); }
+        }
+
+        .certificados:hover{
+            box-shadow: 0 25px 35px rgba(255, 255, 255, 0.2);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px; /* Adjust for denser noise; try 4px for more pixelated look */
+            z-index: -3; /* put the grid further back so it cannot overlay content */
+            pointer-events: none;
+            animation: glitch 1s infinite; /* Optional glitch effect inspired by the video */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            z-index: -2; /* overlay sits above the grid but below content */
+            pointer-events: none;
+            -webkit-mask-image: radial-gradient(
+                circle 150px at var(--mouse-x) var(--mouse-y),
+                transparent 0%,
+                transparent 100px,
+                black 150px
+            );
+            mask-image: radial-gradient(
+                circle 150px at var(--mouse-x) var(--mouse-y),
+                transparent 0%,
+                transparent 100px,
+                black 150px
+            );
+        }
+
+        /* Glitch animation for a video-like feel */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); } /* Green tint shift */
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Default mouse position */
+        :root {
+            --mouse-x: 50vw;
+            --mouse-y: 50vh;
+        }
+
+        /* Ensure content is above the effect layers */
+        .principal, .certificados, .projetos, .contato {
+            position: relative;
+            z-index: 2; /* higher than overlay/grid so effects stay behind */
+        }
+
+        /* Horizontal cards scroller used inside each section */
+        .cards-row {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+        }
+
+        .card-box {
+            display: block;
+            width: 220px;
+            height: 140px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 14px 24px rgba(0,0,0,0.12);
+            text-decoration: none;
+            transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms ease;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .card-box:focus, .card-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 34px rgba(0,0,0,0.16);
+        }
+
+        .card-title {
+            display: block;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="principal">
+    <div class="conteudo">
+        <img id="profile-image" src="caveraodoido.gif">
+        <div class="texto">
+            <header>Eduardo H. Chechin</header>
+            <p>Bachelor's in <em>Computer Science</em> -  <u class="highlight-period">2nd term</u> <br> <strong>Pontifical Catholic University of Paraná</strong>. <em class="completion-date"><br>[EXPECTED GRADUATION: 2028]</em>.</p>
+        </div>
+    </div>
+    <img id="logo" src="puc.png">
+</div>
+
+<!-- Certificados section -->
+<div class="certificados">
+    <h2>CERTIFICATION</h2>
+    <div class="cards-row" aria-label="Certificados cards">
+        <div class="card-item">
+            <span class="card-title">Excel</span>
+            <a class="card-box" href="https://example.com/cert1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Power BI</span>
+            <a class="card-box" href="https://example.com/cert2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Azure</span>
+            <a class="card-box" href="https://example.com/cert3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">DevOps</span>
+            <a class="card-box" href="https://example.com/cert4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Ferramentas Essenciais Para Devs</span>
+            <a class="card-box" href="https://example.com/cert5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Cert 6</span>
+            <a class="card-box" href="https://example.com/cert6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Cert 7</span>
+            <a class="card-box" href="https://example.com/cert7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Cert 8</span>
+            <a class="card-box" href="https://example.com/cert8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')"></a>
+        </div>
+    </div>
+</div>
+
+<!-- Projetos section -->
+<div class="projetos">
+    <h2>PROJECTS</h2>
+    <div class="cards-row" aria-label="Projetos cards">
+        <div class="card-item">
+            <span class="card-title">Proj 1</span>
+            <a class="card-box" href="https://example.com/proj1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 2</span>
+            <a class="card-box" href="https://example.com/proj2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 3</span>
+            <a class="card-box" href="https://example.com/proj3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 4</span>
+            <a class="card-box" href="https://example.com/proj4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 5</span>
+            <a class="card-box" href="https://example.com/proj5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 6</span>
+            <a class="card-box" href="https://example.com/proj6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 7</span>
+            <a class="card-box" href="https://example.com/proj7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Proj 8</span>
+            <a class="card-box" href="https://example.com/proj8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')"></a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Contato section -->
+<div class="contato">
+    <h2>CONTACT</h2>
+    <div class="cards-row" aria-label="Contato cards">
+        <div class="card-item">
+            <span class="card-title">Contato 1</span>
+            <a class="card-box" href="https://example.com/contact1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 2</span>
+            <a class="card-box" href="https://example.com/contact2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 3</span>
+            <a class="card-box" href="https://example.com/contact3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 4</span>
+            <a class="card-box" href="https://example.com/contact4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 5</span>
+            <a class="card-box" href="https://example.com/contact5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 6</span>
+            <a class="card-box" href="https://example.com/contact6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 7</span>
+            <a class="card-box" href="https://example.com/contact7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')"></a>
+        </div>
+        <div class="card-item">
+            <span class="card-title">Contato 8</span>
+            <a class="card-box" href="https://example.com/contact8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')"></a>
+        </div>
+    </div>
+</div>
+
+<div class="grid"></div>
+<div class="overlay"></div>
+
+<script>
+    document.addEventListener('mousemove', (event) => {
+        document.documentElement.style.setProperty('--mouse-x', `${event.clientX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${event.clientY}px`);
+    });
+    // Optional: Add touch support for mobile
+    document.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        document.documentElement.style.setProperty('--mouse-x', `${touch.clientX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${touch.clientY}px`);
+    });
+</script>
+
+</body>
+
+</html>
