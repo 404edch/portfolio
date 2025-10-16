@@ -18,7 +18,7 @@
             min-height: 100vh;
             margin: 0px;
             background-color: #000000;
-            --saber-color: #ffffff; /* default lightsaber color */
+            --saber-color: #ffffff;
             font-family: 'Montserrat', Arial, sans-serif;
             position: relative;
         }
@@ -28,11 +28,10 @@
             align-items: center;
             max-width: 800px;
             width: min(1200px, 100%);
-            margin: 0 auto; /* center the card and prevent huge right space */
-            background-color: #000000; /* opaque off-white so grid stays behind */
+            margin: 0 auto;
+            background-color: #000000;
             border-radius: 20px;
-            padding: 2rem; /* slightly smaller padding to reduce inner white space */
-            /* Lightsaber-style glow on the container */
+            padding: 2rem;
             border: 3px solid var(--saber-color);
             box-shadow:
                 0 0 12px var(--saber-color),
@@ -46,8 +45,6 @@
             display: flex;
             align-items: center;
             gap: 2rem;
-            /* prevent this wrapper from growing to fill the container
-            so the content and logo stay centered as a group */
             flex-grow: 0;
             justify-content: flex-start;
         }
@@ -64,23 +61,20 @@
             font-size: 2rem;
             margin-bottom: 1rem;
             font-weight: 700;
+            color: #ffffff;
         }
 
         .texto {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            max-width: 500px;  /* Limita a largura do texto para melhor leitura */
-            }
+            max-width: 500px;
+        }
 
-            header {
-                color: #ffffff;
-            }
-
-            p {
-                color: #ffffff;
-                line-height: 1.6;
-                font-size: small;
+        p {
+            color: #ffffff;
+            line-height: 1.6;
+            font-size: small;
         }
 
         .completion-date {
@@ -94,30 +88,15 @@
             text-underline-offset: 2px;
         }
 
-        /* Logo styles */
         #logo {
             width: 120px;
             height: auto;
             flex-shrink: 0;
             display: block;
-            margin-left: 1rem; /* small gap between text and logo */
-            
+            margin-left: 1rem;
         }
 
-
-        .certificados {
-            margin-top: 2rem;
-            text-align: center;
-            background-color: #F5F5F5;
-            border-radius: 20px;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
-            max-width: 800px;
-            width: min(1200px, 100%);
-            margin-left: auto;
-            margin-right: auto;
-            padding: 2rem;
-        }
-
+        .certificados,
         .projetos,
         .contato {
             margin-top: 2rem;
@@ -132,14 +111,15 @@
             padding: 2rem;
         }
 
-        /* Pulse glow used by #profile-image */
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 12px var(--saber-color), 0 0 28px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.06); }
             50% { box-shadow: 0 0 20px var(--saber-color), 0 0 36px rgba(0,0,0,0.6), 0 0 50px rgba(0,0,0,0.4), inset 0 0 12px rgba(255,255,255,0.08); }
             100% { box-shadow: 0 0 12px var(--saber-color), 0 0 28px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.06); }
         }
 
-        .certificados:hover{
+        .certificados:hover,
+        .projetos:hover,
+        .contato:hover {
             box-shadow: 0 25px 35px rgba(255, 255, 255, 0.2);
             transition: box-shadow 0.3s ease-in-out;
         }
@@ -151,10 +131,10 @@
             width: 100vw;
             height: 100vh;
             background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px);
-            background-size: 20px 20px; /* Adjust for denser noise; try 4px for more pixelated look */
-            z-index: -3; /* put the grid further back so it cannot overlay content */
+            background-size: 20px 20px;
+            z-index: -3;
             pointer-events: none;
-            animation: glitch 1s infinite; /* Optional glitch effect inspired by the video */
+            animation: glitch 1s infinite;
         }
 
         .overlay {
@@ -164,7 +144,7 @@
             width: 100vw;
             height: 100vh;
             background: black;
-            z-index: -2; /* overlay sits above the grid but below content */
+            z-index: -2;
             pointer-events: none;
             -webkit-mask-image: radial-gradient(
                 circle 150px at var(--mouse-x) var(--mouse-y),
@@ -180,29 +160,25 @@
             );
         }
 
-        /* Glitch animation for a video-like feel */
         @keyframes glitch {
             0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); } /* Green tint shift */
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
             40% { transform: translate(2px, -2px); }
             60% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
             80% { transform: translate(2px, -2px); }
             100% { transform: translate(0); }
         }
 
-        /* Default mouse position */
         :root {
             --mouse-x: 50vw;
             --mouse-y: 50vh;
         }
 
-        /* Ensure content is above the effect layers */
         .principal, .certificados, .projetos, .contato {
             position: relative;
-            z-index: 2; /* higher than overlay/grid so effects stay behind */
+            z-index: 2;
         }
 
-        /* Horizontal cards scroller used inside each section */
         .cards-row {
             display: flex;
             gap: 1rem;
@@ -247,19 +223,126 @@
             font-size: 0.95rem;
             margin: 0;
         }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .principal {
+                padding: 1.5rem;
+                border-width: 2px;
+            }
+
+            .conteudo {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            #profile-image {
+                width: 180px;
+                height: 180px;
+            }
+
+            header {
+                font-size: 1.5rem;
+            }
+
+            .texto {
+                max-width: 100%;
+            }
+
+            #logo {
+                width: 80px;
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .certificados,
+            .projetos,
+            .contato {
+                padding: 1.5rem;
+            }
+
+            .card-box {
+                width: 180px;
+                height: 115px;
+            }
+
+            .card-title {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .principal {
+                padding: 1rem;
+                border-radius: 15px;
+            }
+
+            #profile-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            header {
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
+
+            p {
+                font-size: 0.85rem;
+            }
+
+            #logo {
+                width: 60px;
+            }
+
+            .certificados,
+            .projetos,
+            .contato {
+                padding: 1rem;
+                border-radius: 15px;
+            }
+
+            .certificados h2,
+            .projetos h2,
+            .contato h2 {
+                font-size: 1.25rem;
+            }
+
+            .card-box {
+                width: 150px;
+                height: 95px;
+            }
+
+            .card-title {
+                font-size: 0.75rem;
+            }
+
+            .cards-row {
+                gap: 0.75rem;
+            }
+        }
     </style>
 </head>
 
 <body>
 <div class="principal">
     <div class="conteudo">
-        <img id="profile-image" src="caveraodoido.gif">
+        <img id="profile-image" src="caveraodoido.gif" alt="Eduardo H. Chechin">
         <div class="texto">
             <header>Eduardo H. Chechin</header>
             <p>Bachelor's in <em>Computer Science</em> -  <u class="highlight-period">2nd term</u> <br> <strong>Pontifical Catholic University of Paraná</strong>. <em class="completion-date"><br>[EXPECTED GRADUATION: 2028]</em>.</p>
         </div>
     </div>
-    <img id="logo" src="puc.png">
+    <img id="logo" src="puc.png" alt="PUC Logo">
 </div>
 
 <!-- Certificados section -->
@@ -268,35 +351,35 @@
     <div class="cards-row" aria-label="Certificados cards">
         <div class="card-item">
             <span class="card-title">Excel</span>
-            <a class="card-box" href="https://example.com/cert1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')"></a>
+            <a class="card-box" href="https://example.com/cert1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')" aria-label="Excel certification"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Power BI</span>
-            <a class="card-box" href="https://example.com/cert2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')"></a>
+            <a class="card-box" href="https://example.com/cert2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')" aria-label="Power BI certification"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Azure</span>
-            <a class="card-box" href="https://example.com/cert3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')"></a>
+            <a class="card-box" href="https://example.com/cert3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')" aria-label="Azure certification"></a>
         </div>
         <div class="card-item">
             <span class="card-title">DevOps</span>
-            <a class="card-box" href="https://example.com/cert4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')"></a>
+            <a class="card-box" href="https://example.com/cert4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')" aria-label="DevOps certification"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Ferramentas Essenciais Para Devs</span>
-            <a class="card-box" href="https://example.com/cert5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')"></a>
+            <a class="card-box" href="https://example.com/cert5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')" aria-label="Essential Developer Tools certification"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Cert 6</span>
-            <a class="card-box" href="https://example.com/cert6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')"></a>
+            <a class="card-box" href="https://example.com/cert6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')" aria-label="Certification 6"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Cert 7</span>
-            <a class="card-box" href="https://example.com/cert7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')"></a>
+            <a class="card-box" href="https://example.com/cert7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')" aria-label="Certification 7"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Cert 8</span>
-            <a class="card-box" href="https://example.com/cert8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')"></a>
+            <a class="card-box" href="https://example.com/cert8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')" aria-label="Certification 8"></a>
         </div>
     </div>
 </div>
@@ -307,38 +390,37 @@
     <div class="cards-row" aria-label="Projetos cards">
         <div class="card-item">
             <span class="card-title">Proj 1</span>
-            <a class="card-box" href="https://example.com/proj1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')"></a>
+            <a class="card-box" href="https://example.com/proj1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')" aria-label="Project 1"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 2</span>
-            <a class="card-box" href="https://example.com/proj2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')"></a>
+            <a class="card-box" href="https://example.com/proj2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')" aria-label="Project 2"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 3</span>
-            <a class="card-box" href="https://example.com/proj3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')"></a>
+            <a class="card-box" href="https://example.com/proj3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')" aria-label="Project 3"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 4</span>
-            <a class="card-box" href="https://example.com/proj4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')"></a>
+            <a class="card-box" href="https://example.com/proj4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')" aria-label="Project 4"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 5</span>
-            <a class="card-box" href="https://example.com/proj5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')"></a>
+            <a class="card-box" href="https://example.com/proj5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')" aria-label="Project 5"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 6</span>
-            <a class="card-box" href="https://example.com/proj6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')"></a>
+            <a class="card-box" href="https://example.com/proj6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')" aria-label="Project 6"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 7</span>
-            <a class="card-box" href="https://example.com/proj7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')"></a>
+            <a class="card-box" href="https://example.com/proj7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')" aria-label="Project 7"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Proj 8</span>
-            <a class="card-box" href="https://example.com/proj8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')"></a>
+            <a class="card-box" href="https://example.com/proj8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')" aria-label="Project 8"></a>
         </div>
     </div>
-
 </div>
 
 <!-- Contato section -->
@@ -347,35 +429,35 @@
     <div class="cards-row" aria-label="Contato cards">
         <div class="card-item">
             <span class="card-title">Contato 1</span>
-            <a class="card-box" href="https://example.com/contact1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')"></a>
+            <a class="card-box" href="https://example.com/contact1" target="_blank" rel="noopener" style="background-image:url('images/sample1.svg')" aria-label="Contact 1"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 2</span>
-            <a class="card-box" href="https://example.com/contact2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')"></a>
+            <a class="card-box" href="https://example.com/contact2" target="_blank" rel="noopener" style="background-image:url('images/sample2.svg')" aria-label="Contact 2"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 3</span>
-            <a class="card-box" href="https://example.com/contact3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')"></a>
+            <a class="card-box" href="https://example.com/contact3" target="_blank" rel="noopener" style="background-image:url('images/sample3.svg')" aria-label="Contact 3"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 4</span>
-            <a class="card-box" href="https://example.com/contact4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')"></a>
+            <a class="card-box" href="https://example.com/contact4" target="_blank" rel="noopener" style="background-image:url('images/sample4.svg')" aria-label="Contact 4"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 5</span>
-            <a class="card-box" href="https://example.com/contact5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')"></a>
+            <a class="card-box" href="https://example.com/contact5" target="_blank" rel="noopener" style="background-image:url('images/sample5.svg')" aria-label="Contact 5"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 6</span>
-            <a class="card-box" href="https://example.com/contact6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')"></a>
+            <a class="card-box" href="https://example.com/contact6" target="_blank" rel="noopener" style="background-image:url('images/sample6.svg')" aria-label="Contact 6"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 7</span>
-            <a class="card-box" href="https://example.com/contact7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')"></a>
+            <a class="card-box" href="https://example.com/contact7" target="_blank" rel="noopener" style="background-image:url('images/sample7.svg')" aria-label="Contact 7"></a>
         </div>
         <div class="card-item">
             <span class="card-title">Contato 8</span>
-            <a class="card-box" href="https://example.com/contact8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')"></a>
+            <a class="card-box" href="https://example.com/contact8" target="_blank" rel="noopener" style="background-image:url('images/sample8.svg')" aria-label="Contact 8"></a>
         </div>
     </div>
 </div>
@@ -388,7 +470,7 @@
         document.documentElement.style.setProperty('--mouse-x', `${event.clientX}px`);
         document.documentElement.style.setProperty('--mouse-y', `${event.clientY}px`);
     });
-    // Optional: Add touch support for mobile
+    // Touch support for mobile
     document.addEventListener('touchmove', (event) => {
         const touch = event.touches[0];
         document.documentElement.style.setProperty('--mouse-x', `${touch.clientX}px`);
