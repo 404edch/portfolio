@@ -99,11 +99,17 @@
         .certificados,
         .projetos,
         .contato {
+            text-color: #ffffff;
             margin-top: 2rem;
             text-align: center;
-            background-color: #F5F5F5;
+            background-color: #000000;
             border-radius: 20px;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
+            box-shadow:
+                0 0 12px var(--saber-color),
+                0 0 28px rgba(0,0,0,0.6),
+                0 0 40px rgba(0,0,0,0.4),
+                inset 0 0 10px rgb(255, 255, 255);
+            animation: pulse-glow 2s ease-in-out infinite;
             max-width: 800px;
             width: min(1200px, 100%);
             margin-left: auto;
@@ -481,3 +487,4 @@
 </body>
 
 </html>
+
