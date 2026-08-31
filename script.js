@@ -90,23 +90,30 @@ function unlockAudio() {
   const ctx = getAudioContext();
   if (!ctx) return;
 
+  const resumePromise = ctx.state === 'suspended' ? ctx.resume() : Promise.resolve();
   const oscillator = ctx.createOscillator();
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0, ctx.currentTime);
   oscillator.connect(gain);
   gain.connect(ctx.destination);
-  oscillator.start();
-  oscillator.stop(ctx.currentTime + 0.01);
+  resumePromise.then(() => {
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.01);
+  }).catch(() => {});
 }
 
-['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
-  document.addEventListener(eventName, unlockAudio, { once: true, capture: true });
+['pointerdown', 'touchend', 'keydown'].forEach((eventName) => {
+  document.addEventListener(eventName, unlockAudio, { capture: true, passive: true });
 });
 
 function playTypewriterSound(type = 'key') {
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => playTypewriterSound(type)).catch(() => {});
+      return;
+    }
     const now = ctx.currentTime;
 
     if (type === 'lever') {
@@ -306,6 +313,10 @@ function renderTicketIcon(p) {
 function playPaperTearSound() {
   const ctx = getAudioContext();
   if (!ctx) return;
+  if (ctx.state === 'suspended') {
+    ctx.resume().then(playPaperTearSound).catch(() => {});
+    return;
+  }
   try {
     const now = ctx.currentTime;
 
@@ -360,6 +371,10 @@ function playPaperTearSound() {
 function playPaperAttachSound() {
   const ctx = getAudioContext();
   if (!ctx) return;
+  if (ctx.state === 'suspended') {
+    ctx.resume().then(playPaperAttachSound).catch(() => {});
+    return;
+  }
   try {
     const now = ctx.currentTime;
     const osc = ctx.createOscillator();
@@ -584,6 +599,14 @@ function renderAbout() {
    Real-Time Search Controller
    ========================================================================= */
 
+function revealSearchSection(searchSection) {
+  if (!searchSection) return;
+
+  searchSection.classList.remove('visible');
+  void searchSection.offsetWidth;
+  requestAnimationFrame(() => searchSection.classList.add('visible'));
+}
+
 function initSearch() {
   const searchInput = document.getElementById('searchInput');
   const clearBtn = document.getElementById('clearSearchBtn');
@@ -613,7 +636,7 @@ function initSearch() {
         const ticketsFinishDelay = Math.max(550, (count * 120) + 150);
         setTimeout(() => {
           if (hasBeenPrinted && searchSection) {
-            searchSection.classList.add('visible');
+            revealSearchSection(searchSection);
           }
         }, ticketsFinishDelay);
       }, 450);
@@ -696,7 +719,7 @@ function initPrinter() {
         const searchDelay = (count * 60) + 100;
         setTimeout(() => {
           if (hasBeenPrinted && searchSection) {
-            searchSection.classList.add('visible');
+            revealSearchSection(searchSection);
           }
         }, searchDelay);
       }, 350);
