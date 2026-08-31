@@ -116,7 +116,8 @@ function playTypewriterSound(type = 'key') {
     }
     const now = ctx.currentTime;
 
-    if (type === 'lever') {
+    if (type === 'lever' || type === 'lever-reverse') {
+      const reverseLever = type === 'lever-reverse';
       // High Cortisol Mechanical Casino Slot Arm Pull (Heavy sub-bass impact + 7 rapid intense ratchet teeth + metallic spring ring)
 
       // 1. Heavy Sub-Bass Impact (Visceral Punch)
@@ -125,8 +126,8 @@ function playTypewriterSound(type = 'key') {
       const subGain = ctx.createGain();
 
       subOsc.type = 'triangle';
-      subOsc.frequency.setValueAtTime(240, now);
-      subOsc.frequency.exponentialRampToValueAtTime(28, now + 0.2);
+      subOsc.frequency.setValueAtTime(reverseLever ? 28 : 240, now);
+      subOsc.frequency.exponentialRampToValueAtTime(reverseLever ? 240 : 28, now + 0.2);
 
       subFilter.type = 'lowpass';
       subFilter.frequency.setValueAtTime(600, now);
@@ -148,8 +149,10 @@ function playTypewriterSound(type = 'key') {
         const t = now + 0.03 + i * 0.032;
 
         ratchetOsc.type = 'sawtooth';
-        ratchetOsc.frequency.setValueAtTime(1400 - i * 150, t);
-        ratchetOsc.frequency.exponentialRampToValueAtTime(220, t + 0.026);
+        const startFrequency = reverseLever ? 220 + i * 150 : 1400 - i * 150;
+        const endFrequency = reverseLever ? 1400 - i * 150 : 220;
+        ratchetOsc.frequency.setValueAtTime(startFrequency, t);
+        ratchetOsc.frequency.exponentialRampToValueAtTime(endFrequency, t + 0.026);
 
         ratchetGain.gain.setValueAtTime(0.16, t);
         ratchetGain.gain.exponentialRampToValueAtTime(0.001, t + 0.026);
@@ -167,8 +170,8 @@ function playTypewriterSound(type = 'key') {
       const ringFilter = ctx.createBiquadFilter();
 
       ringOsc.type = 'sine';
-      ringOsc.frequency.setValueAtTime(880, now + 0.05);
-      ringOsc.frequency.exponentialRampToValueAtTime(320, now + 0.25);
+      ringOsc.frequency.setValueAtTime(reverseLever ? 320 : 880, now + 0.05);
+      ringOsc.frequency.exponentialRampToValueAtTime(reverseLever ? 880 : 320, now + 0.25);
 
       ringFilter.type = 'bandpass';
       ringFilter.frequency.setValueAtTime(750, now + 0.05);
@@ -429,7 +432,8 @@ function renderTickets(query = '') {
     const delay = prefersReducedMotion ? '0s' : (reverseIndex * 0.12).toFixed(2) + 's';
 
     if (!prefersReducedMotion && hasBeenPrinted) {
-      setTimeout(() => playTypewriterSound('print'), reverseIndex * 120);
+      const soundDelay = 270 + reverseIndex * 120;
+      setTimeout(() => playTypewriterSound('print'), soundDelay);
     }
 
     return `
@@ -664,7 +668,7 @@ function initPrinter() {
   const scrollCue = document.getElementById('scrollCue');
 
   printBtn.addEventListener('click', () => {
-    playTypewriterSound('lever');
+    playTypewriterSound(hasBeenPrinted ? 'lever' : 'lever-reverse');
     printBtn.classList.add('is-pressed');
     setTimeout(() => printBtn.classList.remove('is-pressed'), 250);
 
