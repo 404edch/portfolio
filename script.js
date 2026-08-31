@@ -9,11 +9,11 @@ const CONFIG = {
   bio: "I like to be proud of the things I do. That's why I do them.",
 
   hobbies: [
-    { label: "Handcrafts.", gif: "https://raw.githubusercontent.com/404edch/assets/main/WhatsApp%20Video%202026-08-30%20at%2019.13.44_1.gif" },
+    { label: "Handcrafts.", gif: "flower.gif" },
     { label: "Music! On spotify and instruments.", youtube: "V6V4vX_SE4I", spotify: "https://open.spotify.com/user/at3p26d35gaoul7cpv0s0jrd1?si=98ab37e4bc774531" },
     { label: "Pokemon Go!", gif: "https://placehold.co/64x64.gif?text=PkGo" },
     { label: "Ice-Skating.", gif: "https://placehold.co/64x64.gif?text=Skate" },
-    { label: "PIU - Pump It Up.", gif: "https://placehold.co/64x64.gif?text=PIU" },
+    { label: "PIU - Pump It Up.", gif: "piu.gif", fit: "original" },
     { label: "Hosting - gamenights, volleyball, movies, cooking, etc...", gif: "https://placehold.co/64x64.gif?text=Host" }
   ],
 
@@ -415,8 +415,6 @@ function renderTickets(query = '') {
     wrap.innerHTML = `
       <div class="no-tickets-box">
         <div class="no-tickets-title">[ CLASSIFIED NOTICE: NO MATCHES ]</div>
-        <p>No dossier cards match the query "<strong>${escapeHTML(query)}</strong>".</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #8C8070;">Try searching for "web", "game", "code", or clear the search input.</p>
       </div>`;
     return;
   }
@@ -517,7 +515,7 @@ function renderAbout() {
         <span class="play-badge">WATCH VIDEO ON YOUTUBE</span>
       </a>`
       : (h.gif
-        ? `<img class="hobby-gif" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}" loading="lazy" decoding="async">`
+        ? `<img class="hobby-gif${h.fit === 'original' ? ' hobby-gif--original' : ''}" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}"${h.fit === 'original' ? ' width="800" height="1422"' : ''} loading="lazy" decoding="async">`
         : '');
 
     return `

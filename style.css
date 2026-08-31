@@ -1109,6 +1109,15 @@ button {
   background: var(--paper-ticket);
 }
 
+.hobby-gif--original {
+  height: auto;
+  aspect-ratio: 800 / 1422;
+  object-fit: contain;
+  object-position: center;
+  border: 0;
+  border-radius: 0;
+}
+
 .hobby-video-link {
   position: relative;
   display: block;
