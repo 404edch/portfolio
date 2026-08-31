@@ -1304,6 +1304,17 @@ button {
     padding: 1.25rem;
   }
 
+  .stamp-seal {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 0 1rem auto;
+    font-size: 0.95rem;
+  }
+
   .about {
     padding-inline: 1rem;
   }

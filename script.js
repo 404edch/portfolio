@@ -556,7 +556,7 @@ function renderAbout() {
 
   document.getElementById('stubDate').textContent = 'CLASSIFIED FILE: ' + new Date().getFullYear();
   document.getElementById('footerLine').textContent =
-    `© ${new Date().getFullYear()} ${CONFIG.name.toUpperCase()} — TYPEWRITER DOSSIER REQUISITION SYSTEM`;
+    `© ${new Date().getFullYear()} ${CONFIG.name.toUpperCase()}`;
 }
 
 /* =========================================================================
