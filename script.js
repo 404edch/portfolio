@@ -106,6 +106,42 @@ function unlockAudio() {
   document.addEventListener(eventName, unlockAudio, { capture: true, passive: true });
 });
 
+function playSearchDrawerSound() {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(playSearchDrawerSound).catch(() => {});
+      return;
+    }
+
+    const now = ctx.currentTime;
+    const slideOsc = ctx.createOscillator();
+    const slideGain = ctx.createGain();
+    const slideFilter = ctx.createBiquadFilter();
+
+    slideOsc.type = 'square';
+    slideOsc.frequency.setValueAtTime(110, now);
+    slideOsc.frequency.exponentialRampToValueAtTime(60, now + 0.12);
+
+    slideFilter.type = 'lowpass';
+    slideFilter.frequency.setValueAtTime(1200, now);
+    slideFilter.Q.setValueAtTime(1.4, now);
+
+    slideGain.gain.setValueAtTime(0.18, now);
+    slideGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+    slideOsc.connect(slideFilter);
+    slideFilter.connect(slideGain);
+    slideGain.connect(ctx.destination);
+
+    slideOsc.start(now);
+    slideOsc.stop(now + 0.12);
+  } catch (e) {
+    // no-op
+  }
+}
+
 function playTypewriterSound(type = 'key') {
   try {
     const ctx = getAudioContext();
@@ -116,7 +152,9 @@ function playTypewriterSound(type = 'key') {
     }
     const now = ctx.currentTime;
 
-    if (type === 'lever' || type === 'lever-reverse') {
+    if (type === 'drawer') {
+      playSearchDrawerSound();
+    } else if (type === 'lever' || type === 'lever-reverse') {
       const reverseLever = type === 'lever-reverse';
       // High Cortisol Mechanical Casino Slot Arm Pull (Heavy sub-bass impact + 7 rapid intense ratchet teeth + metallic spring ring)
 
@@ -230,27 +268,28 @@ function playTypewriterSound(type = 'key') {
       rollerOsc.start(now);
       rollerOsc.stop(now + 0.07);
     } else if (type === 'key') {
-      // Soft vintage typewriter key tap (warm tactile thud)
+      // Sharp metallic typewriter tack / click (short, bright, repeated)
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const filter = ctx.createBiquadFilter();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(260 + Math.random() * 50, now);
-      osc.frequency.exponentialRampToValueAtTime(65, now + 0.04);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(700 + Math.random() * 140, now);
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.03);
 
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(750, now);
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(800, now);
+      filter.Q.setValueAtTime(1.2, now);
 
-      gain.gain.setValueAtTime(0.07, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.04);
+      osc.stop(now + 0.03);
     }
   } catch (e) {
     // Audio fallback
@@ -400,6 +439,32 @@ function playPaperAttachSound() {
 
 let hasBeenPrinted = false;
 
+function playPrintedTicketSounds() {
+  if (prefersReducedMotion) return;
+
+  const tickets = document.querySelectorAll('.ticket');
+  tickets.forEach((_, index) => {
+    const reverseIndex = tickets.length - 1 - index;
+    setTimeout(() => playTypewriterSound('print'), reverseIndex * 120);
+  });
+}
+
+function playPrintSoundAfterSlideDown() {
+  const printerWrap = document.getElementById('printerWrap');
+  if (!printerWrap) return;
+
+  const onTransformEnd = (event) => {
+    if (event.propertyName === 'transform') {
+      setTimeout(() => {
+        playPrintedTicketSounds();
+      }, 300);
+      printerWrap.removeEventListener('transitionend', onTransformEnd);
+    }
+  };
+
+  printerWrap.addEventListener('transitionend', onTransformEnd, { once: true });
+}
+
 function renderTickets(query = '') {
   const wrap = document.getElementById('ticketsInner') || document.getElementById('tickets');
   const searchCount = document.getElementById('searchCount');
@@ -430,10 +495,6 @@ function renderTickets(query = '') {
     // Bottom-up animation delay: bottom ticket appears first (0s), moving UPWARDS to top ticket
     const reverseIndex = filtered.length - 1 - i;
     const delay = prefersReducedMotion ? '0s' : (reverseIndex * 0.12).toFixed(2) + 's';
-
-    if (!prefersReducedMotion && hasBeenPrinted) {
-      setTimeout(() => playTypewriterSound('print'), reverseIndex * 120);
-    }
 
     return `
       <article class="ticket" style="--delay:${delay}">
@@ -614,8 +675,14 @@ function initSearch() {
 
   if (!searchInput) return;
 
+  searchInput.addEventListener('keydown', (e) => {
+    const ignoredKeys = new Set(['Shift', 'Control', 'Alt', 'Meta', 'Tab', 'CapsLock', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']);
+    if (!ignoredKeys.has(e.key) && (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete' || e.key === 'Escape')) {
+      playTypewriterSound('key');
+    }
+  });
+
   searchInput.addEventListener('input', (e) => {
-    playTypewriterSound('key');
     const val = e.target.value;
     clearBtn.style.display = val.length > 0 ? 'block' : 'none';
 
@@ -625,6 +692,8 @@ function initSearch() {
       const searchSection = document.getElementById('searchSection');
       const scrollCue = document.getElementById('scrollCue');
       printerWrap.classList.add('is-printed');
+      playSearchDrawerSound();
+      playPrintSoundAfterSlideDown();
 
       setTimeout(() => {
         hasBeenPrinted = true;
@@ -647,7 +716,7 @@ function initSearch() {
   });
 
   clearBtn.addEventListener('click', () => {
-    playTypewriterSound('key');
+    playTypewriterSound('drawer');
     searchInput.value = '';
     clearBtn.style.display = 'none';
     searchInput.focus();
@@ -667,9 +736,17 @@ function initPrinter() {
   const scrollCue = document.getElementById('scrollCue');
 
   printBtn.addEventListener('click', () => {
-    playTypewriterSound(hasBeenPrinted ? 'lever' : 'lever-reverse');
-    printBtn.classList.add('is-pressed');
-    setTimeout(() => printBtn.classList.remove('is-pressed'), 250);
+    if (!hasBeenPrinted) {
+      printBtn.classList.add('is-pressed');
+      setTimeout(() => {
+        playTypewriterSound('lever-reverse');
+      }, 300);
+      setTimeout(() => printBtn.classList.remove('is-pressed'), 250);
+    } else {
+      playTypewriterSound('lever');
+      printBtn.classList.add('is-pressed');
+      setTimeout(() => printBtn.classList.remove('is-pressed'), 250);
+    }
 
     if (hasBeenPrinted) {
       // --- RETRACT TICKETS WITH SMOOTH GRID HEIGHT SHRINK ---
@@ -706,6 +783,7 @@ function initPrinter() {
     } else {
       // --- DISPATCH TICKETS ---
       printerWrap.classList.add('is-printed');
+      playPrintSoundAfterSlideDown();
 
       setTimeout(() => {
         hasBeenPrinted = true;
@@ -723,7 +801,7 @@ function initPrinter() {
             revealSearchSection(searchSection);
           }
         }, searchDelay);
-      }, 350);
+      }, 450);
     }
   });
 
