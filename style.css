@@ -304,7 +304,7 @@ button {
   border: 1.5px solid #4A4237;
   padding: 0.55rem 1.2rem;
   border-radius: 999px;
-  gap: 0.6rem;
+  gap: 0.45rem;
   transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -1212,7 +1212,7 @@ button {
   gap: 0.6rem;
   background: var(--stamp-red);
   color: #F0E6D2;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 0.8rem 0.8rem 1.5rem;
   border-radius: 4px;
   text-decoration: none;
   font-family: var(--font-display);
@@ -1220,7 +1220,8 @@ button {
   font-weight: bold;
   border: 1.5px solid #000;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.8s ease,
+    border-color 0.8s ease, color 0.8s ease;
 }
 
 .copy-email-btn {
@@ -1249,16 +1250,59 @@ button {
   color: #F0E6D2;
 }
 
-.copy-email-btn.is-copied {
+.email-btn.is-copied {
   border-style: solid;
   border-color: var(--stamp-green);
-  color: var(--stamp-green);
-  background: rgba(47, 90, 56, 0.12);
+  color: #F0E6D2;
+  background: var(--stamp-green);
+  animation: copiedButtonFeedback 3.6s ease forwards;
+}
+
+.email-btn.is-copied #emailLabel {
+  display: inline-block;
+  animation: emailLabelPulse 1.1s ease-in-out 2;
+}
+
+@keyframes copiedButtonFeedback {
+  0%,
+  8% {
+    background-color: var(--stamp-red);
+    border-color: #000;
+  }
+
+  18%,
+  70% {
+    background-color: var(--stamp-green);
+    border-color: var(--stamp-green);
+  }
+
+  100% {
+    background-color: var(--stamp-red);
+    border-color: #000;
+  }
+}
+
+@keyframes emailLabelPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
 }
 
 .email-btn:hover {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.6);
+}
+
+.email-btn .copy-icon {
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .slip-note {
@@ -1361,6 +1405,11 @@ button {
     background: var(--stamp-green);
     border-color: var(--stamp-green);
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .email-btn.is-copied,
+  .email-btn.is-copied #emailLabel {
+    animation: none;
   }
 
   * {

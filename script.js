@@ -481,7 +481,7 @@ function renderAbout() {
       ? `<a class="hobby-video-placeholder" href="https://www.youtube.com/watch?v=${encodeURIComponent(h.youtube)}"
         target="_blank" rel="noopener noreferrer" aria-label="Watch ${escapeHTML(h.label)} video on YouTube">
         <img src="https://i.ytimg.com/vi/${escapeHTML(h.youtube)}/hqdefault.jpg"
-          alt="" loading="lazy" decoding="async">
+          alt="" width="480" height="360" loading="eager" fetchpriority="high" decoding="async">
         <span class="play-badge">WATCH VIDEO ON YOUTUBE</span>
       </a>`
       : (h.gif
@@ -524,6 +524,11 @@ function renderAbout() {
   const copyEmail = async (e) => {
     if (e) e.preventDefault();
     playTypewriterSound('key');
+    emailLabel.textContent = 'E-MAIL COPIED!';
+    emailLink.classList.remove('is-copied');
+    void emailLink.offsetWidth;
+    emailLink.classList.add('is-copied');
+
     try {
       await navigator.clipboard.writeText(CONFIG.email);
     } catch (err) {
@@ -537,14 +542,11 @@ function renderAbout() {
       document.body.removeChild(temp);
     }
 
-    emailLabel.textContent = 'E-MAIL COPIED!';
-    emailLink.classList.add('is-copied');
-
     clearTimeout(emailResetTimer);
     emailResetTimer = setTimeout(() => {
       emailLabel.textContent = 'TRANSMIT EMAIL';
       emailLink.classList.remove('is-copied');
-    }, 3000);
+    }, 3600);
   };
 
   emailLink.addEventListener('click', copyEmail);
