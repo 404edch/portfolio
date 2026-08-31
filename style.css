@@ -1159,7 +1159,7 @@ button {
 
 .play-badge {
   position: absolute;
-  bottom: 8px;
+  bottom: 3px;
   left: 8px;
   right: 8px;
   background: rgba(0, 0, 0, 0.75);
@@ -1167,6 +1167,8 @@ button {
   font-family: var(--font-display);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
+  line-height: 1.2;
+  padding: 0.55rem 0.6rem 0.45rem;
   width: min(100%, 270px);
   border-radius: 3px;
   text-align: center;

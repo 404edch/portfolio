@@ -432,8 +432,7 @@ function renderTickets(query = '') {
     const delay = prefersReducedMotion ? '0s' : (reverseIndex * 0.12).toFixed(2) + 's';
 
     if (!prefersReducedMotion && hasBeenPrinted) {
-      const soundDelay = 270 + reverseIndex * 120;
-      setTimeout(() => playTypewriterSound('print'), soundDelay);
+      setTimeout(() => playTypewriterSound('print'), reverseIndex * 120);
     }
 
     return `
