@@ -9,12 +9,12 @@ const CONFIG = {
   bio: "I like to be proud of the things I do. That's why I do them.",
 
   hobbies: [
-    { label: "Handcrafts", gif: "https://github.com/404edch/assets/blob/main/WhatsApp%20Video%202026-08-30%20at%2019.13.44_1.gif?raw=true" },
-    { label: "Playing music, on spotify and instruments!", youtube: "V6V4vX_SE4I" },
+    { label: "Handcrafts.", gif: "https://raw.githubusercontent.com/404edch/assets/main/WhatsApp%20Video%202026-08-30%20at%2019.13.44_1.gif" },
+    { label: "Music! On spotify and instruments.", youtube: "V6V4vX_SE4I" },
     { label: "Pokemon Go!", gif: "https://placehold.co/64x64.gif?text=PkGo" },
-    { label: "Ice-Skating", gif: "https://placehold.co/64x64.gif?text=Skate" },
-    { label: "PIU (Pump It Up)", gif: "https://placehold.co/64x64.gif?text=PIU" },
-    { label: "Hosting events - gamenights, volleyball, movies, cooking, etc...", gif: "https://placehold.co/64x64.gif?text=Host" }
+    { label: "Ice-Skating.", gif: "https://placehold.co/64x64.gif?text=Skate" },
+    { label: "PIU - Pump It Up.", gif: "https://placehold.co/64x64.gif?text=PIU" },
+    { label: "Hosting - gamenights, volleyball, movies, cooking, etc...", gif: "https://placehold.co/64x64.gif?text=Host" }
   ],
 
   email: "edhchechin@gmail.com",
@@ -478,12 +478,14 @@ function renderAbout() {
   const hobbies = document.getElementById('hobbies');
   hobbies.innerHTML = CONFIG.hobbies.map((h) => {
     const media = h.youtube
-      ? `<iframe class="hobby-video" src="https://www.youtube.com/embed/${h.youtube}"
-        title="${escapeHTML(h.label)}" loading="lazy" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>`
+      ? `<a class="hobby-video-placeholder" href="https://www.youtube.com/watch?v=${encodeURIComponent(h.youtube)}"
+        target="_blank" rel="noopener noreferrer" aria-label="Watch ${escapeHTML(h.label)} video on YouTube">
+        <img src="https://i.ytimg.com/vi/${escapeHTML(h.youtube)}/hqdefault.jpg"
+          alt="" loading="lazy" decoding="async">
+        <span class="play-badge">WATCH VIDEO ON YOUTUBE</span>
+      </a>`
       : (h.gif
-        ? `<img class="hobby-gif" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}" loading="lazy" onerror="this.style.display='none'">`
+        ? `<img class="hobby-gif" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}" loading="lazy" decoding="async">`
         : '');
 
     return `
@@ -492,6 +494,7 @@ function renderAbout() {
       ${media}
     </li>`;
   }).join('');
+
   /* Layout: #hobbies is a single-column vertical list — one full-width
      row per hobby, gif thumbnail on the left, label on the right.
      See CSS block below. */
