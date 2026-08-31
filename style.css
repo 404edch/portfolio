@@ -1,0 +1,1297 @@
+/* =========================================================
+   SHIZU'S WORKSHOP — Outlast Trials Vintage Typewriter Theme
+   ========================================================= */
+
+:root {
+  --bg-dark: #141311;
+  /* gritty dark dossier background */
+  --paper-bg: #24211D;
+  /* institutional document panel background */
+  --paper-ticket: #F4E4C1;
+  /* rich creamier yellower vintage ticket stock */
+  --paper-ticket-alt: #EADBBA;
+  /* ticket details inner creamy yellow background */
+  --ink: #171513;
+  /* dark typewriter ribbon ink */
+  --ink-faded: #5E564B;
+  /* secondary aged text */
+  --stamp-red: #A32223;
+  /* crimson rubber stamp / blood accent */
+  --stamp-red-bg: rgba(163, 34, 35, 0.12);
+  --stamp-green: #2F5A38;
+  /* murkoff status green */
+  --line: #8C8070;
+  /* typewriter border line */
+  --line-faded: #3B3630;
+  /* section divider */
+
+  --font-display: 'Special Elite', 'Courier New', monospace;
+  --font-body: 'Courier Prime', 'Courier New', monospace;
+  --font-digital: 'VT323', monospace;
+
+  --max-w: 680px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.outlast-theme {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: #D9CEA;
+  font-family: var(--font-body);
+  position: relative;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 50% 30%, #201D19 0%, var(--bg-dark) 80%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
+}
+
+/* Gritty vignette and scanlines */
+.vignette-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.85);
+}
+
+.scanlines-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  opacity: 0.25;
+  background: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px dashed var(--stamp-red);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   HERO / DOSSIER HEADER
+   ========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.25rem 5rem;
+  z-index: 1;
+}
+
+.hero-inner {
+  width: 100%;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Classified Rubber Stamp */
+.dossier-stamp-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.classified-stamp {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 0.35em;
+  color: var(--stamp-red);
+  border: 3px solid var(--stamp-red);
+  padding: 0.2rem 1.2rem;
+  padding-top: 0.5rem;
+  transform: rotate(-3deg);
+  text-shadow: 0 0 2px rgba(163, 34, 35, 0.4);
+  box-shadow: 0 0 8px rgba(163, 34, 35, 0.25);
+  background: var(--stamp-red-bg);
+  text-transform: uppercase;
+}
+
+.facility-tag {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--line);
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.25em;
+  color: #9C8E7B;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* =========================================================
+   VINTAGE TYPEWRITER SEARCH BAR
+   ========================================================= */
+
+.search-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(0, -14px, 0);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s ease;
+  will-change: opacity, transform;
+}
+
+.search-section.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+}
+
+.search-box-container {
+  background: #1C1916;
+  border: 2px dashed var(--line);
+  border-radius: 24px;
+  padding: 1.25rem 1.75rem;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7), 0 4px 14px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-box-container:focus-within {
+  transform: scale(1.02);
+  border-color: var(--stamp-red);
+  box-shadow: inset 0 0 25px rgba(163, 34, 35, 0.15), 0 0 20px rgba(163, 34, 35, 0.35);
+}
+
+.search-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #B5A58D;
+}
+
+.search-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--stamp-red);
+  transition: transform 0.3s ease;
+}
+
+.search-box-container:focus-within .search-icon {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.eye-icon {
+  width: 22px;
+  height: 22px;
+  overflow: visible;
+}
+
+.eye-outline {
+  stroke: var(--stamp-red);
+}
+
+.eye-pupil {
+  fill: var(--stamp-red);
+  animation: pupilGlance 5s ease-in-out infinite;
+  transform-origin: 12px 12px;
+}
+
+.eye-lid-top {
+  stroke: var(--stamp-red);
+  fill: #1C1916;
+  transform-origin: 12px 12px;
+  animation: eyeBlink 3.2s ease-in-out infinite;
+}
+
+/* Eye Blinking Animation */
+@keyframes eyeBlink {
+
+  0%,
+  88%,
+  100% {
+    transform: scaleY(0.05);
+    opacity: 0;
+  }
+
+  92%,
+  96% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Pupil Glancing Animation */
+@keyframes pupilGlance {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  30% {
+    transform: translate(-2.5px, 0);
+  }
+
+  60% {
+    transform: translate(2.5px, -1px);
+  }
+
+  80% {
+    transform: translate(0, 1px);
+  }
+}
+
+.search-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: #D5C6AC;
+  text-transform: uppercase;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #0D0C0B;
+  border: 1.5px solid #4A4237;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  gap: 0.6rem;
+  transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: var(--stamp-red);
+  box-shadow: 0 0 14px rgba(163, 34, 35, 0.5);
+  animation: searchPulse 1.6s ease-in-out infinite alternate;
+}
+
+.search-input-wrapper:active {
+  transform: scale(0.985);
+}
+
+@keyframes searchPulse {
+  0% {
+    box-shadow: 0 0 8px rgba(163, 34, 35, 0.35);
+  }
+
+  100% {
+    box-shadow: 0 0 18px rgba(163, 34, 35, 0.7);
+  }
+}
+
+.prompt-symbol {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--stamp-red);
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.search-input-wrapper:focus-within .prompt-symbol {
+  transform: translateX(2px);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #F0E6D2;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.search-input::placeholder {
+  color: #5E564B;
+  font-style: italic;
+}
+
+.clear-search-btn {
+  color: var(--stamp-red);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0 0.4rem;
+  transition: transform 0.15s ease;
+}
+
+.clear-search-btn:hover {
+  transform: scale(1.2);
+  color: #E03131;
+}
+
+/* =========================================================
+   PRINTER
+   ========================================================= */
+
+.printer-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.6s ease;
+  margin-bottom: 2rem;
+}
+
+.printer-btn {
+  width: min(75vw, 270px);
+  padding: 0;
+  transition: transform 0.15s ease;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+}
+
+.printer-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.printer-btn:active {
+  transform: translateY(2px) scale(0.98);
+}
+
+.printer-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.plate-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  fill: #171513;
+  font-weight: bold;
+}
+
+.plate-subtext {
+  font-family: var(--font-body);
+  font-size: 8.5px;
+  letter-spacing: 0.8px;
+  fill: #4A4237;
+}
+
+.printer-light {
+  animation: redDotBlink 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.printer-wrap.is-printed .printer-light {
+  animation: redDotBlinkFast 1.4s ease-in-out infinite;
+}
+
+@keyframes redDotBlink {
+
+  0%,
+  100% {
+    fill: #400A0A;
+    filter: drop-shadow(0 0 0px rgba(255, 40, 40, 0));
+    opacity: 0.45;
+  }
+
+  50% {
+    fill: #FF2B2B;
+    filter: drop-shadow(0 0 7px #FF2B2B);
+    opacity: 1;
+  }
+}
+
+@keyframes redDotBlinkFast {
+
+  0%,
+  100% {
+    fill: #600E0E;
+    filter: drop-shadow(0 0 2px #FF2B2B);
+    opacity: 0.6;
+  }
+
+  50% {
+    fill: #FF3B3B;
+    filter: drop-shadow(0 0 10px #FF3B3B);
+    opacity: 1;
+  }
+}
+
+.printer-press {
+  transform-origin: 40px 106px;
+  will-change: transform;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.printer-btn.is-pressed .printer-press {
+  transform: translate3d(0, 8px, 0) scale(0.95);
+}
+
+.hint {
+  margin-top: 1.25rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.15em;
+  color: var(--stamp-red);
+  font-size: 0.85rem;
+  background: var(--stamp-red-bg);
+  border: 1px solid var(--stamp-red);
+  padding: 0.4rem 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.printer-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tickets.tickets-column {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  margin-bottom: 0;
+  transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, margin-bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.tickets.tickets-column.visible {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  margin-bottom: 2rem;
+}
+
+.tickets-wrapper-inner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 0;
+  width: 100%;
+}
+
+.printer-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+}
+
+
+
+.printer-wrap.is-printed {
+  transform: translate3d(0, 50px, 0);
+}
+
+.printer-wrap.has-tickets {
+  transform: translate3d(0, 0, 0);
+}
+
+.printer-wrap.is-printed .hint {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Authentic Ticket Document Shape with Notch Cutouts & Perforations */
+/* Launching tickets: smooth fade and slide-in for natural layout expansion */
+@keyframes ticketSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0) scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Prevent clipping across container hierarchy */
+.hero,
+.tickets,
+.tickets-column,
+.tickets-wrapper-inner,
+.ticket,
+.ticket-stub-side,
+.ticket-main-section {
+  overflow: visible !important;
+}
+
+.ticket {
+  --rot: 0deg;
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: ticketSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--delay, 0s);
+  transition: transform 0.25s ease;
+}
+
+/* Smooth Reverse Exit Animation when Tickets Retract */
+@keyframes ticketSlideOut {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 25px, 0) scale(0.95);
+  }
+}
+
+.tickets.tickets-column.is-retracting .ticket {
+  animation: ticketSlideOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  animation-delay: var(--retract-delay, 0s) !important;
+}
+
+/* SEPARATE LEFT STUB ENTITY (No internal box-shadow to avoid section overlapping shadows) */
+.ticket-stub-side {
+  flex: 0 0 58px;
+  height: 60px;
+  background: var(--paper-ticket);
+  border: 2px solid #352C24;
+  border-radius: 4px 0 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+/* RED STAR POSITIONED OUTSIDE TICKET CONTAINER TO THE LEFT */
+.external-star-icon {
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--stamp-red);
+  font-size: 0.95rem;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(0 0 2px rgba(163, 34, 35, 0.4));
+  transition: color 0.3s ease;
+}
+
+/* PURELY HORIZONTAL DETACHMENT KEYFRAMES (Resistance -> tension pause -> fast horizontal release -> smooth settle) */
+@keyframes stubDetach {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  20% {
+    transform: translate3d(2.5px, 0, 0);
+    /* short resistance pull */
+  }
+
+  38% {
+    transform: translate3d(2.5px, 0, 0);
+    /* brief tension pause */
+  }
+
+  75% {
+    transform: translate3d(-34px, 0, 0);
+    /* fast horizontal release shooting left */
+  }
+
+  100% {
+    transform: translate3d(-30px, 0, 0);
+    /* smooth deceleration settle */
+  }
+}
+
+/* DETACHED STATE ON OPEN (Purely horizontal motion, red star follows 1:1) */
+.ticket.open .ticket-stub-side {
+  animation: stubDetach 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  border-radius: 4px;
+  border-right: 2px solid #352C24;
+  background: #E6D9C3;
+}
+
+.ticket.open .external-star-icon {
+  color: #C92A2A;
+}
+
+/* SLOW ICON FLICKER ANIMATION FOR SELECTED TICKET */
+@keyframes slowIconFlicker {
+
+  0%,
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 3px rgba(163, 34, 35, 0.7));
+  }
+
+  25% {
+    opacity: 0.78;
+    filter: drop-shadow(0 0 1px rgba(163, 34, 35, 0.3));
+  }
+
+  50% {
+    opacity: 0.96;
+    filter: drop-shadow(0 0 4px rgba(163, 34, 35, 0.85));
+  }
+
+  75% {
+    opacity: 0.84;
+    filter: drop-shadow(0 0 2px rgba(163, 34, 35, 0.45));
+  }
+}
+
+.ticket.open .ticket-stub-side .ticket-icon {
+  animation: slowIconFlicker 2.8s infinite ease-in-out;
+  color: var(--stamp-red);
+}
+
+.ticket-stub-side .ticket-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--stamp-red);
+  transition: transform 0.3s ease;
+}
+
+/* RIGHT MAIN TICKET SECTION */
+.ticket-main-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 3;
+}
+
+/* True Semicircle Right Hole Cutout Notch (Inside the right ticket border) */
+.ticket-main-section::after {
+  content: "";
+  position: absolute;
+  top: 30px;
+  right: 0px;
+  width: 10px;
+  height: 20px;
+  background: #141311;
+  border: 2px solid #352C24;
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+  transform: translateY(-50%);
+  z-index: 5;
+  box-shadow: inset 2px 0 3px rgba(0, 0, 0, 0.7);
+}
+
+/* SEPARATE MAIN TICKET BODY BUTTON (Flat separation, no title section shadow) */
+.ticket-body-button {
+  width: 100%;
+  min-height: 60px;
+  background: var(--paper-ticket);
+  border: 2px solid #352C24;
+  border-left: 1.5px dashed #4A3E33;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.3rem;
+  text-align: left;
+  position: relative;
+  z-index: 3;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-left-style 0.3s ease;
+}
+
+.ticket.open .ticket-body-button {
+  border-left: 2px solid #352C24;
+  border-radius: 0 4px 0 0;
+}
+
+.ticket-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.2;
+  font-weight: bold;
+  flex: 1;
+  color: #171513;
+  letter-spacing: 0.02em;
+}
+
+.ticket-toggle {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--stamp-red);
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.ticket.open .ticket-toggle {
+  transform: rotate(45deg);
+}
+
+/* EXPANDABLE DETAILS PANEL - ALIGNED EXCLUSIVELY WITH THE RIGHT SECTION */
+.ticket-details-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+.ticket.open .ticket-details-wrap {
+  grid-template-rows: 1fr;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.ticket-details-inner {
+  overflow: hidden;
+  min-height: 0;
+  background: var(--paper-ticket-alt);
+  border: 2px solid #352C24;
+  border-top: 1.5px dashed #4A3E33;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 4px 6px 0 rgba(14, 12, 10, 0.6);
+  padding: 0 1.3rem;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.1s, padding 0.38s ease;
+}
+
+.ticket.open .ticket-details-inner {
+  padding: 1.1rem 1.3rem 1.2rem;
+  opacity: 1;
+}
+
+.ticket-details-inner p {
+  padding: 0 0 0.8rem 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #26211C;
+  font-family: var(--font-body);
+}
+
+.ticket-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.4rem 1rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: bold;
+  color: var(--stamp-red);
+  text-decoration: none;
+  border: 1.5px solid var(--stamp-red);
+  background: var(--stamp-red-bg);
+  padding: 0.35rem 0.8rem;
+  border-radius: 3px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ticket-link:hover {
+  background: var(--stamp-red);
+  color: var(--paper-ticket);
+}
+
+/* Empty search state */
+.no-tickets-box {
+  background: #1C1916;
+  border: 2px dashed var(--stamp-red);
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+  max-width: 540px;
+  border-radius: 4px;
+  color: #D5C6AC;
+}
+
+.no-tickets-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--stamp-red);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+/* Scroll cue right under Search Bar */
+.scroll-cue {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: #8C8070;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  opacity: 0.85;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.scroll-cue:hover {
+  opacity: 1;
+  transform: translateY(2px);
+}
+
+.scroll-cue.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-cue svg {
+  animation: bob 1.6s ease-in-out infinite;
+  color: var(--stamp-red);
+}
+
+@keyframes bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+/* =========================================================
+   ABOUT / DOSSIER FILE
+   ========================================================= */
+
+.about {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 1.25rem 4rem;
+  border-top: 3px dashed var(--line-faded);
+  background: #181614;
+}
+
+.about-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.stub-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--stamp-red);
+  margin-bottom: 1.5rem;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  line-height: 1.1;
+  color: #F0E6D2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tagline {
+  margin-top: 0.6rem;
+  font-style: italic;
+  color: #A39682;
+  font-size: 1.05rem;
+}
+
+.bio {
+  margin-top: 1.5rem;
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: #D5C6AC;
+  max-width: 60ch;
+}
+
+.block-label {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  color: var(--stamp-red);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--line);
+  margin-bottom: 1rem;
+}
+
+.hobbies-block,
+.socials-block {
+  margin-top: 3rem;
+}
+
+/* Hobbies list — one full-width row per hobby, gif thumbnail on the
+   left, label on the right, styled like the dossier ticket cards */
+.hobbies {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hobbies li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  border: 1.5px solid #4A4237;
+  background: #23201C;
+  color: #D5C6AC;
+  font-family: var(--font-display);
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 0.85rem;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.hobbies li:hover {
+  transform: translate(-2px, -2px);
+  border-color: var(--stamp-red);
+}
+
+.hobby-gif {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1.5px solid #352C24;
+  flex-shrink: 0;
+  background: var(--paper-ticket);
+}
+
+.hobby-video-link {
+  position: relative;
+  display: block;
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+}
+
+.hobby-video-link .hobby-gif {
+  width: 100%;
+  height: 100%;
+}
+
+.play-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #F0E6D2;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0.6rem;
+  border-radius: 3px;
+  text-align: center;
+  border: 1px solid var(--stamp-red);
+  transition: background-color 0.2s ease;
+}
+
+.hobby-video-link:hover .play-badge {
+  background: var(--stamp-red);
+}
+
+.hobby-label {
+  line-height: 1.3;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.hobby-video {
+  width: 300px;
+  height: 300px;
+  border-radius: 3px;
+  border: 1.5px solid #352C24;
+  flex-shrink: 0;
+  background: #000;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.1rem;
+  border: 1.5px solid #4A4237;
+  border-radius: 4px;
+  background: #23201C;
+  color: #F0E6D2;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+.social-link:hover {
+  transform: translate(-2px, -2px);
+  border-color: var(--stamp-red);
+}
+
+.social-link svg {
+  width: 18px;
+  height: 18px;
+  color: var(--stamp-red);
+}
+
+/* Contact Slip / Requisition Form */
+.contact-slip {
+  margin-top: 3.5rem;
+  border: 2px dashed var(--stamp-red);
+  border-radius: 4px;
+  padding: 2rem;
+  background: #23201C;
+  position: relative;
+  overflow: hidden;
+}
+
+.stamp-seal {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--stamp-green);
+  border: 2px solid var(--stamp-green);
+  padding: 0.2rem 0.8rem;
+  padding-top: 0.5rem;
+  transform: rotate(6deg);
+  letter-spacing: 0.2em;
+  opacity: 0.85;
+}
+
+.slip-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: #8C8070;
+  margin-bottom: 1rem;
+}
+
+.slip-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: #F0E6D2;
+}
+
+.slip-body {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #D5C6AC;
+  max-width: 55ch;
+}
+
+.email-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.email-btn {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--stamp-red);
+  color: #F0E6D2;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: bold;
+  border: 1.5px solid #000;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.copy-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: #D5C6AC;
+  padding: 0.78rem 1.2rem;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: bold;
+  border: 1.5px dashed var(--line);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.copy-email-btn svg {
+  flex-shrink: 0;
+}
+
+.copy-email-btn:hover {
+  transform: translate(-2px, -2px);
+  border-color: var(--stamp-red);
+  color: #F0E6D2;
+}
+
+.copy-email-btn.is-copied {
+  border-style: solid;
+  border-color: var(--stamp-green);
+  color: var(--stamp-green);
+  background: rgba(47, 90, 56, 0.12);
+}
+
+.email-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.6);
+}
+
+.slip-note {
+  margin-top: 1rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: #8C8070;
+}
+
+.slip-note span {
+  color: #D5C6AC;
+  text-decoration: underline dashed;
+}
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--line-faded);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: #8C8070;
+  text-align: center;
+}
+
+/* =========================================================
+   RESPONSIVE & REDUCED MOTION
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 2rem;
+  }
+
+  .classified-stamp {
+    font-size: 1.2rem;
+  }
+
+  .name {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+
+  .contact-slip {
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .ticket {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .printer-light,
+  .scroll-cue svg {
+    animation: none;
+  }
+
+  .email-btn.is-copied {
+    background: var(--stamp-green);
+    border-color: var(--stamp-green);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  * {
+    transition-duration: 0.05s !important;
+  }
+}
