@@ -1110,10 +1110,11 @@ button {
 }
 
 .hobby-gif--original {
-  height: auto;
-  aspect-ratio: 800 / 1422;
-  object-fit: contain;
-  object-position: center;
+  width: min(100%, 270px);
+  height: 430px;
+  aspect-ratio: 270 / 430;
+  object-fit: cover;
+  object-position: center bottom;
   border: 0;
   border-radius: 0;
 }
@@ -1166,7 +1167,7 @@ button {
   font-family: var(--font-display);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
-  padding: 0.4rem 0.6rem;
+  width: min(100%, 270px);
   border-radius: 3px;
   text-align: center;
   border: 1px solid var(--stamp-red);
@@ -1178,6 +1179,7 @@ button {
 }
 
 .hobby-label {
+    width: min(100%, 270px);
   line-height: 1.3;
 }
 
@@ -1474,6 +1476,10 @@ button {
   .hobby-video {
     width: 100%;
     max-width: 300px;
+  }
+
+  .hobby-gif--original {
+    width: min(100%, 270px);
   }
 }
 
