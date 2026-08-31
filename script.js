@@ -10,7 +10,7 @@ const CONFIG = {
 
   hobbies: [
     { label: "Handcrafts.", gif: "https://raw.githubusercontent.com/404edch/assets/main/WhatsApp%20Video%202026-08-30%20at%2019.13.44_1.gif" },
-    { label: "Music! On spotify and instruments.", youtube: "V6V4vX_SE4I" },
+    { label: "Music! On spotify and instruments.", youtube: "V6V4vX_SE4I", spotify: "https://open.spotify.com/user/at3p26d35gaoul7cpv0s0jrd1?si=98ab37e4bc774531" },
     { label: "Pokemon Go!", gif: "https://placehold.co/64x64.gif?text=PkGo" },
     { label: "Ice-Skating.", gif: "https://placehold.co/64x64.gif?text=Skate" },
     { label: "PIU - Pump It Up.", gif: "https://placehold.co/64x64.gif?text=PIU" },
@@ -85,6 +85,23 @@ function getAudioContext() {
     return null;
   }
 }
+
+function unlockAudio() {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  oscillator.connect(gain);
+  gain.connect(ctx.destination);
+  oscillator.start();
+  oscillator.stop(ctx.currentTime + 0.01);
+}
+
+['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
+  document.addEventListener(eventName, unlockAudio, { once: true, capture: true });
+});
 
 function playTypewriterSound(type = 'key') {
   try {
@@ -490,7 +507,9 @@ function renderAbout() {
 
     return `
     <li class="hobby-item">
-      <span class="hobby-label">[ ${escapeHTML(h.label).toUpperCase()} ]</span>
+      ${h.spotify
+        ? `<span class="hobby-label">[ MUSIC! ON <a class="spotify-link" href="${escapeHTML(h.spotify)}" target="_blank" rel="noopener noreferrer">SPOTIFY</a> AND INSTRUMENTS. ]</span>`
+        : `<span class="hobby-label">[ ${escapeHTML(h.label).toUpperCase()} ]</span>`}
       ${media}
     </li>`;
   }).join('');
@@ -700,4 +719,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAbout();
   initSearch();
   initPrinter();
+  requestAnimationFrame(() => document.body.classList.add('page-ready'));
 });
