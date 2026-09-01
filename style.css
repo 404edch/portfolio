@@ -1257,6 +1257,148 @@ button {
   background: #000;
 }
 
+/* YouTube Player Modal Styles */
+.youtube-player-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.youtube-player-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+}
+
+.youtube-player-container {
+  position: relative;
+  z-index: 1001;
+  width: 90vw;
+  height: 90vh;
+  max-width: 1200px;
+  max-height: 675px;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 2px solid var(--stamp-red);
+  border-radius: 4px;
+  box-shadow: 0 0 40px rgba(163, 34, 35, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  animation: slideIn 0.3s ease cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.youtube-player-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1002;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1.5px solid var(--stamp-red);
+  color: #F0E6D2;
+  font-size: 28px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.youtube-player-close:hover {
+  background: var(--stamp-red);
+  transform: scale(1.1);
+}
+
+.youtube-player-close:active {
+  transform: scale(0.95);
+}
+
+.hobby-play-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  display: block;
+  width: min(100%, 300px);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1.5px solid #352C24;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hobby-play-btn:hover {
+  border-color: var(--stamp-red);
+  box-shadow: 0 0 12px rgba(163, 34, 35, 0.4);
+}
+
+.hobby-play-btn:focus {
+  outline: 2px solid var(--stamp-red);
+  outline-offset: 2px;
+}
+
+.hobby-play-btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.hobby-play-btn .play-badge {
+  position: absolute;
+  bottom: 3px;
+  left: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #F0E6D2;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  padding: 0.55rem 0.6rem 0.45rem;
+  width: min(100%, 270px);
+  border-radius: 3px;
+  text-align: center;
+  border: 1px solid var(--stamp-red);
+  transition: background-color 0.2s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hobby-play-btn:hover .play-badge {
+  background: var(--stamp-red);
+}
+
 .social-link {
   display: inline-flex;
   align-items: center;

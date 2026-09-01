@@ -599,6 +599,65 @@ function waitForImagesLoad() {
 }
 
 /* =========================================================================
+   YouTube Player Modal
+   ========================================================================= */
+
+function openYoutubePlayer(e) {
+  e.preventDefault();
+  const youtubeId = e.currentTarget.dataset.youtubeId;
+  if (!youtubeId) return;
+
+  // Create modal overlay
+  const modal = document.createElement('div');
+  modal.className = 'youtube-player-modal';
+  modal.innerHTML = `
+    <div class="youtube-player-backdrop"></div>
+    <div class="youtube-player-container">
+      <button class="youtube-player-close" aria-label="Close video player">
+        <span>×</span>
+      </button>
+      <iframe 
+        width="100%" 
+        height="100%" 
+        src="https://www.youtube.com/embed/${escapeHTML(youtubeId)}?autoplay=1" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = 'hidden';
+
+  const closeModal = () => {
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleEscape);
+    modal.remove();
+  };
+
+  // Close button handler
+  const closeBtn = modal.querySelector('.youtube-player-close');
+  closeBtn.addEventListener('click', closeModal);
+
+  // Click on backdrop to close
+  const backdrop = modal.querySelector('.youtube-player-backdrop');
+  backdrop.addEventListener('click', closeModal);
+
+  // Escape key to close
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+}
+
+/* =========================================================================
    Render About / Contact Section
    ========================================================================= */
 
@@ -608,14 +667,13 @@ function renderAbout() {
   document.getElementById('bio').textContent = CONFIG.bio;
 
   const hobbies = document.getElementById('hobbies');
-  hobbies.innerHTML = CONFIG.hobbies.map((h) => {
+  hobbies.innerHTML = CONFIG.hobbies.map((h, idx) => {
     const media = h.youtube
-      ? `<a class="hobby-video-placeholder" href="https://www.youtube.com/watch?v=${encodeURIComponent(h.youtube)}"
-        target="_blank" rel="noopener noreferrer" aria-label="Watch ${escapeHTML(h.label)} video on YouTube">
+      ? `<button class="hobby-video-placeholder hobby-play-btn" data-youtube-id="${escapeHTML(h.youtube)}" data-hobby-index="${idx}" aria-label="Play ${escapeHTML(h.label)} video">
         <img src="https://i.ytimg.com/vi/${escapeHTML(h.youtube)}/hqdefault.jpg"
           alt="" width="480" height="360" loading="eager" fetchpriority="high" decoding="async">
-        <span class="play-badge">WATCH VIDEO ON YOUTUBE</span>
-      </a>`
+        <span class="play-badge">CLICK TO PLAY</span>
+      </button>`
       : (h.gif
         ? `<div class="hobby-gif-container">
           <img class="hobby-gif${h.fit === 'original' ? ' hobby-gif--original' : ''}" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}"${h.fit === 'original' ? ' width="800" height="1422"' : ''} loading="lazy" decoding="async">
@@ -633,6 +691,11 @@ function renderAbout() {
 
   // Start loading images after DOM is updated
   setTimeout(waitForImagesLoad, 0);
+
+  // Attach event listeners to play buttons
+  document.querySelectorAll('.hobby-play-btn').forEach(btn => {
+    btn.addEventListener('click', openYoutubePlayer);
+  });
 
   /* Layout: #hobbies is a single-column vertical list — one full-width
      row per hobby, gif thumbnail on the left, label on the right.
