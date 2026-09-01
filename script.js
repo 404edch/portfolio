@@ -561,6 +561,44 @@ function renderTickets(query = '') {
 }
 
 /* =========================================================================
+   Loading State Management
+   ========================================================================= */
+
+function waitForImagesLoad() {
+  // Get all images in the hobbies section and any hobby-related images
+  const images = document.querySelectorAll('.hobby-gif, .hobby-video-placeholder img');
+  
+  images.forEach((img) => {
+    // Find the closest container that can have position: relative
+    let container = img.closest('.hobby-video-placeholder') || img.closest('.hobby-gif-container');
+    
+    // Only show loading indicator if image is not already loaded
+    if (!img.complete && container) {
+      // Create and add loading indicator
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.className = 'image-loading-indicator';
+      loadingIndicator.innerHTML = '<div class="loading-spinner"></div>';
+      
+      container.appendChild(loadingIndicator);
+      
+      const removeLoadingIndicator = () => {
+        if (loadingIndicator.parentElement) {
+          loadingIndicator.classList.add('hidden');
+          setTimeout(() => {
+            if (loadingIndicator.parentElement) {
+              loadingIndicator.remove();
+            }
+          }, 300);
+        }
+      };
+      
+      img.addEventListener('load', removeLoadingIndicator, { once: true });
+      img.addEventListener('error', removeLoadingIndicator, { once: true });
+    }
+  });
+}
+
+/* =========================================================================
    Render About / Contact Section
    ========================================================================= */
 
@@ -579,7 +617,9 @@ function renderAbout() {
         <span class="play-badge">WATCH VIDEO ON YOUTUBE</span>
       </a>`
       : (h.gif
-        ? `<img class="hobby-gif${h.fit === 'original' ? ' hobby-gif--original' : ''}" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}"${h.fit === 'original' ? ' width="800" height="1422"' : ''} loading="lazy" decoding="async">`
+        ? `<div class="hobby-gif-container">
+          <img class="hobby-gif${h.fit === 'original' ? ' hobby-gif--original' : ''}" src="${escapeHTML(h.gif)}" alt="${escapeHTML(h.label)}"${h.fit === 'original' ? ' width="800" height="1422"' : ''} loading="lazy" decoding="async">
+        </div>`
         : '');
 
     return `
@@ -590,6 +630,9 @@ function renderAbout() {
       ${media}
     </li>`;
   }).join('');
+
+  // Start loading images after DOM is updated
+  setTimeout(waitForImagesLoad, 0);
 
   /* Layout: #hobbies is a single-column vertical list — one full-width
      row per hobby, gif thumbnail on the left, label on the right.
